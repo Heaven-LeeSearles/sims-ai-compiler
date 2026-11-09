@@ -5,13 +5,14 @@ on:
 
 jobs:
   compile:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+
+    container:
+      image: python:3.7.17-bullseye
 
     steps:
-      - name: Set up Python 3.7
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.7'
+      - name: Check Python version
+        run: python --version
 
       - name: Compile test script
         run: |
