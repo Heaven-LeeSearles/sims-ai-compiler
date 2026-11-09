@@ -1,3 +1,4 @@
+
 name: Compile Sims 4 Python Script
 
 on:
@@ -17,14 +18,22 @@ jobs:
       - name: Check Python version
         run: python --version
 
-      - name: Compile test script
+      - name: Compile all mod modules
         run: |
           mkdir -p output
-          python -m py_compile main.py
-          cp __pycache__/main.cpython-37.pyc output/main.pyc
+          python -m py_compile main.py sim_profiles.py
 
-      - name: Upload compiled script
+          cp __pycache__/main.cpython-37.pyc output/main.pyc
+          cp __pycache__/sim_profiles.cpython-37.pyc output/sim_profiles.pyc
+
+      - name: Package Sims 4 mod
+        run: |
+          cd output
+          zip SimsAI_Test.ts4script main.pyc sim_profiles.pyc
+
+      - name: Upload compiled mod
         uses: actions/upload-artifact@v4
         with:
-          name: sims-ai-test
-          path: output/main.pyc
+          name: SimsAI_Test
+          path: output/SimsAI_Test.ts4script
+
