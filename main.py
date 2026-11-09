@@ -1,7 +1,7 @@
 
 """
 Sims AI Messaging Mod
-Sim Detection Test
+Sim Profile Detection Test
 """
 
 import services
@@ -25,9 +25,19 @@ def list_sims(_connection=None):
         for sim in sims:
             first = getattr(sim, "first_name", "Unknown")
             last = getattr(sim, "last_name", "")
+            sim_id = getattr(sim, "id", "Unknown")
 
-            output("{} {}".format(first, last))
+            household = getattr(sim, "household", None)
+            household_id = getattr(household, "id", "None")
+
+            output(
+                "{} {} | Sim ID: {} | Household ID: {}".format(
+                    first,
+                    last,
+                    sim_id,
+                    household_id
+                )
+            )
 
     except Exception as error:
         output("Sims AI error: {}".format(error))
-
