@@ -26,10 +26,22 @@ jobs:
           cp __pycache__/main.cpython-37.pyc output/main.pyc
           cp __pycache__/sim_profiles.cpython-37.pyc output/sim_profiles.pyc
 
-      - name: Package Sims 4 mod
+            - name: Package Sims 4 mod
         run: |
           cd output
-          zip SimsAI_Test.ts4script main.pyc sim_profiles.pyc
+          python - <<'PY'
+          import zipfile
+
+          with zipfile.ZipFile(
+              "SimsAI_Test.ts4script",
+              "w",
+              zipfile.ZIP_DEFLATED
+          ) as archive:
+              archive.write("main.pyc")
+              archive.write("sim_profiles.pyc")
+
+          print("Sims AI mod packaged successfully!")
+          PY
 
       - name: Upload compiled mod
         uses: actions/upload-artifact@v4
