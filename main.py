@@ -1,11 +1,17 @@
 
 """
 Sims AI Messaging Mod
-Sim Profile Detection Test
+Main Entry Point
 """
 
 import services
 import sims4.commands
+
+import sim_profiles
+
+
+MOD_NAME = "Sims AI Messaging Mod"
+VERSION = "0.2.0"
 
 
 @sims4.commands.Command(
@@ -18,26 +24,28 @@ def list_sims(_connection=None):
 
     try:
         sim_manager = services.sim_info_manager()
-        sims = list(sim_manager.get_all())
+        sim_infos = list(sim_manager.get_all())
 
-        output("Sims AI: Found {} Sims".format(len(sims)))
+        profiles = sim_profiles.build_sim_profiles(sim_infos)
 
-        for sim in sims:
-            first = getattr(sim, "first_name", "Unknown")
-            last = getattr(sim, "last_name", "")
-            sim_id = getattr(sim, "id", "Unknown")
+        output("{}: Found {} Sims".format(
+            MOD_NAME,
+            len(profiles)
+        ))
 
-            household = getattr(sim, "household", None)
-            household_id = getattr(household, "id", "None")
+        for profile in profiles:
 
             output(
-                "{} {} | Sim ID: {} | Household ID: {}".format(
-                    first,
-                    last,
-                    sim_id,
-                    household_id
+                "{} | ID: {} | Household: {} | Age: {} | Species: {} | Traits: {}".format(
+                    profile["full_name"],
+                    profile["sim_id"],
+                    profile["household_id"],
+                    profile["age"],
+                    profile["species"],
+                    len(profile["trait_ids"])
                 )
             )
 
     except Exception as error:
         output("Sims AI error: {}".format(error))
+
