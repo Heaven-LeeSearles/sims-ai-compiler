@@ -1,0 +1,26 @@
+name: Compile Sims 4 Python Script
+
+on:
+  workflow_dispatch:
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.7'
+
+      - name: Compile test script
+        run: |
+          mkdir -p output
+          python -m py_compile main.py
+          cp __pycache__/main.cpython-37.pyc output/main.pyc
+
+      - name: Upload compiled script
+        uses: actions/upload-artifact@v4
+        with:
+          name: sims-ai-test
+          path: output/main.pyc
