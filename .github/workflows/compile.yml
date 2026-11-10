@@ -21,14 +21,15 @@ jobs:
       - name: Compile all mod modules
         run: |
           mkdir -p output
-          python -m py_compile main.py sim_profiles.py
+          python -m py_compile main.py sim_profiles.py phone_messages.py
           cp __pycache__/main.cpython-37.pyc output/main.pyc
           cp __pycache__/sim_profiles.cpython-37.pyc output/sim_profiles.pyc
+          cp __pycache__/phone_messages.cpython-37.pyc output/phone_messages.pyc
 
-      - name: Package Sims 4 mod
+      - name: Package SimsAI mod
         run: |
           cd output
-          python -c "import zipfile; z = zipfile.ZipFile('SimsAI_Test.ts4script', 'w', zipfile.ZIP_DEFLATED); z.write('main.pyc'); z.write('sim_profiles.pyc'); z.close()"
+          python -c "import zipfile; z = zipfile.ZipFile('SimsAI_Test.ts4script', 'w', zipfile.ZIP_DEFLATED); z.write('main.pyc'); z.write('sim_profiles.pyc'); z.write('phone_messages.pyc'); z.close()"
           echo "Sims AI mod packaged successfully!"
 
       - name: Upload compiled mod
